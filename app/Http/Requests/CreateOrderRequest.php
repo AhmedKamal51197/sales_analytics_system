@@ -23,8 +23,9 @@ class CreateOrderRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
+            'products'=> 'required|array',
+            'products.*.id' => 'required|exists:products,id',
+            'products.*.quantity' => 'required|integer|min:1',   
             'status' => 'in:pending,completed,canceled',
             // 'order_date' => 'required|date',
             

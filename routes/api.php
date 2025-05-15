@@ -24,3 +24,6 @@ Route::prefix('products')->group(function () {
 Route::prefix('orders')->group(function () {
     Route::post('/', 'App\Http\Controllers\OrderController@store')->name('orders.store');
 });
+Route::prefix('analytics')->group(function () {
+    Route::get('/', 'App\Http\Controllers\AnalyticsController@index')->name('analytics.index');
+});

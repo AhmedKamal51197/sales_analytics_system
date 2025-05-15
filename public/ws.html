@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebSocket Orders & Analytics</title>
+</head>
+<body>
+  <h1>Real-Time Updates</h1>
+
+  <h2>New Orders</h2>
+  <ul id="orders-list"></ul>
+
+  <h2>Analytics Updates</h2>
+  <pre id="analytics-data">{}</pre>
+
+  <script>
+    // Connect to your Ratchet WebSocket server
+    const ws = new WebSocket('ws://localhost:8080');
+
+    ws.onopen = () => {
+      console.log('Connected to WebSocket server');
+    };
+
+    ws.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
+
+      if (msg.type === 'new_order') {
+        console.log('New order:', msg.data);
+        const ordersList = document.getElementById('orders-list');
+        const li = document.createElement('li');
+        li.textContent = `Order #${msg.data.id}, User: ${msg.data.user_id}, Total: ${msg.data.total_price}`;
+        ordersList.prepend(li);
+
+      } else if (msg.type === 'analytics_update') {
+        console.log('Analytics updated:', msg.data);
+        const analyticsPre = document.getElementById('analytics-data');
+        analyticsPre.textContent = JSON.stringify(msg.data, null, 2);
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket connection closed');
+    };
+  </script>
+</body>
+</html>

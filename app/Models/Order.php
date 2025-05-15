@@ -16,6 +16,7 @@ class Order extends Model
         'price',
         'status',
         // 'order_date',
+        'total_price'
     ];  
     protected $casts = [
         'order_date' => 'datetime',
@@ -25,9 +26,10 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function product()
+    public function products()
     {
-        return $this->belongsTo(product::class);
+        return $this->belongsToMany(Product::class,'order_products')
+        ->withPivot('price','quantity');
     }
     public function scopePending($query)
     {
